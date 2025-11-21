@@ -55,7 +55,7 @@ ROOT_URLCONF = 'poll.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],#葉面範本哪裡找(預設每個應用程式逐一找)
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
