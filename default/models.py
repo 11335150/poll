@@ -17,5 +17,5 @@ class option(models.Model):
     #他會給編號 從1開始
 
     def __str__(self): 
-        return "{}-{}".format(self.poll_id,self.titles) #顯示什麼
+        return "{}-{}-{}".format(self.poll_id,self.titles,self.votes) #顯示什麼
         
