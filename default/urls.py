@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import poll_list, PollList, PollView, PollVote
+from .views import poll_list, PollList, PollView, PollVote,PollCreate,PollEdit,OptionCreate
 
 urlpatterns = [
   path("", poll_list),#專案的處理規則都要列在專案中(poll/urls)
@@ -11,4 +11,7 @@ urlpatterns = [
   path('<int:oid>/vote/', PollVote.as_view(), name = 'poll_vote'),
   #'<int:自選名稱>/vote/'
   #name參數，來命名
+  path('add',PollCreate.as_view(),name = 'poll_create'),
+  path("<int:pk>/edit", PollEdit.as_view(), name = "poll_edit"),
+  path("<int:pid>/add", OptionCreate.as_view(), name = "option_create"),
 ]

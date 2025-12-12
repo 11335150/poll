@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import poll,option
-from django.views.generic import ListView, DetailView,RedirectView
-from django.urls import reverse
+from django.views.generic import ListView, DetailView,RedirectView,CreateView,UpdateView
+from django.urls import reverse,reverse_lazy
 # Create your views here.
 
 #處理函式
@@ -39,4 +39,28 @@ class PollVote(RedirectView):
         #get:一筆資料;filter:多筆資料
         options.votes += 1
         options.save()
-        return reverse('poll_view', args=[options.poll_id])
+        return reverse('poll_view', args=[options.poll_id])#kwargs = {'pk':option.poll_id}
+
+class PollCreate(CreateView):
+    model = poll
+    fields = '__all__'#['subject','desc']#all會顯示自動填寫以外的全部
+    success_url = reverse_lazy('poll_list')
+    
+    
+class PollEdit(UpdateView):
+    model = poll
+    fields = '__all__'
+
+    def get_success_url(self):
+        return reverse_lazy('poll_view', kwargs = {'pk': self.object.id})
+    
+class OptionCreate(CreateView):
+    model = option
+    fields = ['titles']
+
+    def form_valid(self, form):
+        form.instance.poll_id = self.kwargs['pid']
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('poll_view',kwargs = {'pk': self.kwargs['pid']})
