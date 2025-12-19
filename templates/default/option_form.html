@@ -1,10 +1,10 @@
 
 {% extends "base.html" %}
 
-{% block title %}新增{% endblock %}
+{% block title %}新增/修改選項{% endblock %}
 
 {% block main %}
-        <h1>新增</h1>
+        <h1>新增/修改選項</h1>
     <form action="" method="post">
         {% csrf_token %}
         {{ form.as_p }}
