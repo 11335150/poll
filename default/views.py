@@ -2,6 +2,7 @@ from django.shortcuts import render
 from .models import poll,option
 from django.views.generic import ListView, DetailView,RedirectView,CreateView,UpdateView,DeleteView
 from django.urls import reverse,reverse_lazy
+from django.contrib.auth.mixins import LoginRequiredMixin#Mixin不能單獨存在
 # Create your views here.
 
 #處理函式
@@ -41,20 +42,20 @@ class PollVote(RedirectView):
         options.save()
         return reverse('poll_view', args=[options.poll_id])#kwargs = {'pk':option.poll_id}
 
-class PollCreate(CreateView):
+class PollCreate(LoginRequiredMixin, CreateView):
     model = poll
     fields = '__all__'#['subject','desc']#all會顯示自動填寫以外的全部
     success_url = reverse_lazy('poll_list')
     
     
-class PollEdit(UpdateView):
+class PollEdit(LoginRequiredMixin,UpdateView):
     model = poll
     fields = '__all__'
 
     def get_success_url(self):
         return reverse_lazy('poll_view', kwargs = {'pk': self.object.id})
     
-class OptionCreate(CreateView):
+class OptionCreate(LoginRequiredMixin,CreateView):
     model = option
     fields = ['titles']
 
@@ -66,7 +67,7 @@ class OptionCreate(CreateView):
         return reverse_lazy('poll_view',kwargs = {'pk': self.kwargs['pid']})
 
 
-class OptionEdit(UpdateView):
+class OptionEdit(LoginRequiredMixin,UpdateView):
     model = option
     fields = ['titles']
     pk_url_kwarg = 'oid'
@@ -75,7 +76,7 @@ class OptionEdit(UpdateView):
         return reverse_lazy('poll_view',kwargs = {'pk': self.object.poll_id})#self.poll
     #self.object 代表目前那筆紀錄
 
-class PollDelete(DeleteView):
+class PollDelete(LoginRequiredMixin,DeleteView):
     model = poll
     success_url = reverse_lazy('poll_list')
 
